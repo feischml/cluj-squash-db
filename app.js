@@ -1,0 +1,1 @@
+console.log("Cluj-Squash-DB running");

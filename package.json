@@ -1,0 +1,15 @@
+{
+  "name": "cluj-squash-db",
+  "version": "1.0.0",
+  "description": "Cluj Squash DB",
+  "main": ".mongorc.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "Laszlo Feischmidt",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^4.10.6"
+  }
+}
