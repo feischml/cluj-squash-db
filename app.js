@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config');
 
+// Add routing to Express App
+var appRouting = require('./routes');
+
 // Connect to the MongoDB
 mongoose.connect(config.mongoose.root + config.mongoose.dbname);
 let db = mongoose.connection;
@@ -20,18 +23,18 @@ db.on('error', function(err){
     console.log(err);
 });
 
+
 // Init app
 const app = express();
-
 // Set cors - calls from other apps to be possible
 app.use(cors({ origin: config.origin.url }));
+// Add routers
+appRouting.initRoutes(app);
 
-// Bring in Models, Schemas, Routes
 
-//...
 
 // Start listening to port -> you can start now the localhost:port and see what happens
 app.listen(config.express.port, function(){
-    console.log("Server srated on port: " + config.express.port);
+    console.log("Server started on port: " + config.express.port);
 });
 
