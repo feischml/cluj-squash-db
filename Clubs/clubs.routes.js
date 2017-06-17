@@ -15,8 +15,11 @@ router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
         if (err)
             console.log(err);
-        else
-            console.log(clubs);    
+        else {
+            // ToDo delete - for testing purposes write result to console
+            console.log(clubs);  
+            res.send(clubs);
+        }  
     })
 });
 
