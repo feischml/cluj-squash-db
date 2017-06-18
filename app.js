@@ -1,10 +1,11 @@
 console.log("Cluj-Squash-DB running");
 
-// Import mongoose, express and cors
+// Import mongoose, express, express-validator and cors
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config');
+const expressValidator = require('express-validator');
 
 // Add routing to Express App
 var appRouting = require('./routes');
@@ -26,6 +27,23 @@ db.on('error', function(err){
 
 // Init app
 const app = express();
+// Add Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.');
+      var root = namespace.shift();
+      var formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
 // Set cors - calls from other apps to be possible
 app.use(cors({ origin: config.origin.url }));
 // Add routers

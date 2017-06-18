@@ -1,5 +1,7 @@
 let mongoose = require('mongoose');
-let geoJson = require('mongoose-geojson-schema');
+
+// Needed for mongoose.Schema.Types.Point
+let geoJson = require('mongoose-geojson-schema'); 
 
 let clubSchema = mongoose.Schema({
     clubname:{

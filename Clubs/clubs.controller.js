@@ -9,9 +9,8 @@ module.exports.createClub = function (club, callback) {
 }
 
 // Get a Club with given name
-module.exports.getClub = function (name, callback) {
-	var query = { name: name };
-	ClubsSchema.findOne(query, callback);
+module.exports.getClub = function (options, callback) {
+	ClubsSchema.findOne(options, callback);
 }
 
 // Get all Clubs
