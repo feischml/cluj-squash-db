@@ -5,7 +5,7 @@ module.exports = ClubsSchema;
 
 // Create Club
 module.exports.createClub = function (club, callback) {
-	club.save(callback);
+    ClubsSchema.create(club, callback);
 }
 
 module.exports.updateClub = function (club, callback) {

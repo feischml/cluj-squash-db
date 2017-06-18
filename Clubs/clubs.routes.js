@@ -5,7 +5,34 @@ var Club = require('./clubs.controller');
 
 // 1. Create Club
 router.post('/create', function(req, res){
-    // ToDo
+    // Validation
+    req.checkBody('webpage', 'Webpage is required!').notEmpty();
+    req.checkBody('clubname', 'Clubname is required!').notEmpty();
+    req.checkBody('phone', 'Phone is required!').notEmpty();
+    req.checkBody('description', 'Description is required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors){
+        res.status(495).send(errors);
+        console.log(errors);
+    } else {
+        var club = new Club();
+        club.clubname       = req.body.clubname;
+		club.description    = req.body.description;
+		club.phone          = req.body.phone;
+		club.webpage        = req.body.webpage;
+        //ToDo: club.location       = req.body.location;
+
+        Club.createClub(club, function(err, cClub){
+            if (err)
+				throw err;
+			else if (cClub)
+                res.status(200).send(cClub); // Return back the created data
+			else
+				res.status(400).send("Club not created");
+        });
+
+    }
 });
 
 // 1.b. Update Club
@@ -15,8 +42,8 @@ router.put('/update', function(req, res){
 
 	var errors = req.validationErrors();
 	if (errors){
-		res.status(495).send(err);
-        console.log(err);
+		res.status(495).send(errors);
+        console.log(errors);
     }
 	else {
         var club = new Club();
@@ -92,9 +119,7 @@ function executeClubDbQuery(query, res){
                 if (!club)
                     res.status(495).send("Club not found!");
                 else {
-                    res.send(club);
-                    // ToDo delete - for testing purposes write result to console
-                    console.log(club);  
+                    res.send(club);  
                 }
             }    
         });
