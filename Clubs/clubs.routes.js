@@ -11,9 +11,10 @@ router.post('/create', function(req, res){
 // 2. Get Clubs - http://localhost:3000/clubs/clubs
 router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
-        if (err)
+        if (err){
+            res.send(495,err);
             console.log(err);
-        else {
+        } else {
             res.send(clubs);
             // ToDo delete - for testing purposes write result to console
             console.log(clubs);  
@@ -58,9 +59,13 @@ function executeClubDbQuery(query, res){
             if (err)
                 console.log(err);
             else{
-                res.send(club);
-                // ToDo delete - for testing purposes write result to console
-                console.log(club);  
+                if (!club)
+                    res.send(495,"Club Not Found");
+                else {
+                    res.send(club);
+                    // ToDo delete - for testing purposes write result to console
+                    console.log(club);  
+                }
             }    
         });
 }
