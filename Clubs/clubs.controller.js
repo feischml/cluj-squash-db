@@ -8,6 +8,11 @@ module.exports.createClub = function (club, callback) {
 	club.save(callback);
 }
 
+module.exports.updateClub = function (club, callback) {
+    var cond = { _id: club._id };
+	ClubsSchema.findOneAndUpdate(cond, club, { new: true }, callback);
+}
+
 // Get a Club with given name
 module.exports.getClub = function (options, callback) {
 	ClubsSchema.findOne(options, callback);

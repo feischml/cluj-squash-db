@@ -5,7 +5,37 @@ var Club = require('./clubs.controller');
 
 // 1. Create Club
 router.post('/create', function(req, res){
+    // ToDo
+});
 
+// 1.b. Update Club
+router.put('/update', function(req, res){
+    // Validation
+	req.checkBody('_id', 'Club id is required!').notEmpty();
+
+	var errors = req.validationErrors();
+	if (errors){
+		res.status(495).send(err);
+        console.log(err);
+    }
+	else {
+        var club = new Club();
+		club._id            = req.body._id;
+		club.clubname       = req.body.clubname;
+		club.description    = req.body.description;
+		club.phone          = req.body.phone;
+		club.webpage        = req.body.webpage;
+        club.location       = req.body.location;
+
+		Club.updateClub(club, function (err, uClub) {
+			if (err)
+				throw err;
+			else if (uClub)
+                res.status(200).send("Club updated successfully");
+			else
+				res.status(400).send("Club updated not ok");
+		});
+    }
 });
 
 // 2. Get Clubs - http://localhost:3000/clubs/clubs
