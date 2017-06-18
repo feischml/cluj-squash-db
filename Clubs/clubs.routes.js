@@ -12,7 +12,7 @@ router.post('/create', function(req, res){
 router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
         if (err){
-            res.send(495,err);
+            res.status(495).send(err);
             console.log(err);
         } else {
             res.send(clubs);
@@ -30,8 +30,8 @@ router.get('/clubname/:name', function(req,res){
     // Check validation error
     var errors = req.validationErrors();
     if (errors){
+        res.status(495).send(errors);
         console.log(errors);    
-        res.send(495,errors);
     } else {
         var query = { clubname: req.params.name };    
         executeClubDbQuery(query, res);
@@ -46,8 +46,8 @@ router.get('/clubid/:id', function(req, res){
     // Check validation error
     var errors = req.validationErrors();
     if (errors){
+        res.status(495).send(errors);
         console.log(errors);
-        res.send(495,errors);
     } else {   
         var query = { _id: req.params.id };
         executeClubDbQuery(query, res);
@@ -60,7 +60,7 @@ function executeClubDbQuery(query, res){
                 console.log(err);
             else{
                 if (!club)
-                    res.send(495,"Club Not Found");
+                    res.status(495).send("Club not found!");
                 else {
                     res.send(club);
                     // ToDo delete - for testing purposes write result to console
