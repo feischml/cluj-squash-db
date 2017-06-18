@@ -31,7 +31,7 @@ router.put('/update', function(req, res){
 			if (err)
 				throw err;
 			else if (uClub)
-                res.status(200).send("Club updated successfully");
+                res.status(200).send(uClub); // Return back the updated data
 			else
 				res.status(400).send("Club updated not ok");
 		});
