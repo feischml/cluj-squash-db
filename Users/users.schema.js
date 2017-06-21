@@ -14,6 +14,10 @@ let userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    email:{
+        type: String,
+        required: true
+    },
     password:{
         type: String,
         required: true
@@ -24,7 +28,7 @@ let userSchema = mongoose.Schema({
     },
     admin:{
         type: Boolean,
-        required: true
+        required: false
     }
     // ToDo photoId -> "join with Photos"
 });

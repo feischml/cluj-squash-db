@@ -125,4 +125,5 @@ function executeClubDbQuery(query, res){
         });
 }
 
+// Export Router
 module.exports = router;
