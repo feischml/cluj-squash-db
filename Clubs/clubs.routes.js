@@ -70,11 +70,8 @@ router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
         if (err){
             res.status(495).send(err);
-            console.log(err);
         } else {
-            res.send(clubs);
-            // ToDo delete - for testing purposes write result to console
-            console.log(clubs);  
+            res.send(clubs); 
         }  
     })
 });

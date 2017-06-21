@@ -43,6 +43,50 @@ router.post('/register', function(req, res){
 
 });
 
+// 2. Get Users - http://localhost:3000/users/users
+router.get('/users', function(req, res){
+    User.getUsers(function(err, users){
+        if (err){
+            res.status(495).send(err);
+            console.log(err);
+        } else {
+            res.send(users);
+            // ToDo delete - for testing purposes write result to console
+            console.log(users);  
+        }  
+    })
+});
+
+// 3. Get User by ID - http://localhost:3000/users/userid/:idToSearchForInDb
+router.get('/userid/:id', function(req, res){
+    // Validation: req.params = { id: 'idToSearchForInDb' };
+	req.checkParams('id', 'User id is required!').notEmpty().isHexadecimal();
+
+    // Check validation error
+    var errors = req.validationErrors();
+    if (errors){
+        res.status(495).send(errors);
+        console.log(errors);
+    } else {   
+        var query = { _id: req.params.id };
+        executeUserDbQuery(query, res);
+    }
+});
+
+function executeUserDbQuery(query, res){
+    User.getUser(query, function(err, user){
+            if (err)
+                console.log(err);
+            else{
+                if (!user)
+                    res.status(495).send("User not found!");
+                else {
+                    res.send(user);  
+                }
+            }    
+        });
+}
+
 // Export Router
 module.exports = router;
 

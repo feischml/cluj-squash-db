@@ -25,3 +25,8 @@ module.exports.updateUser = function (user, callback) {
 module.exports.getUser = function (options, callback) {
 	UsersSchema.findOne(options, callback);
 }
+
+// Get all Users
+module.exports.getUsers = function (users, callback) {
+	UsersSchema.find(users, callback);
+}
