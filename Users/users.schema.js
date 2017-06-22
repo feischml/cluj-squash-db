@@ -25,12 +25,10 @@ let userSchema = mongoose.Schema({
     phone:{
         type: String,
         required: false
-    },
-    admin:{
-        type: Boolean,
-        required: false
     }
+    
     // ToDo photoId -> "join with Photos"
+    // ToDo roleId -> "join with Roles" 1-n relationship
 });
 
 module.exports = mongoose.model('user', userSchema, 'users');

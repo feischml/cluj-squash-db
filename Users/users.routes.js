@@ -19,7 +19,6 @@ router.post('/register', function(req, res){
 
     if(errors){
         res.status(495).send(errors);
-        console.log(errors);
     }else{
         var user = new User();
         user.fullname = req.body.fullname;
@@ -27,7 +26,6 @@ router.post('/register', function(req, res){
         user.username = req.body.username;
         user.password = req.body.password;
         user.phone = req.body.phone;
-        user.admin = req.body.admin;
         user.email = req.body.email;
         // ToDo user.photoid = req.body.photoid;
 
@@ -50,9 +48,7 @@ router.get('/users', function(req, res){
             res.status(495).send(err);
             console.log(err);
         } else {
-            res.send(users);
-            // ToDo delete - for testing purposes write result to console
-            console.log(users);  
+            res.send(users); 
         }  
     })
 });
@@ -66,10 +62,42 @@ router.get('/userid/:id', function(req, res){
     var errors = req.validationErrors();
     if (errors){
         res.status(495).send(errors);
-        console.log(errors);
     } else {   
         var query = { _id: req.params.id };
         executeUserDbQuery(query, res);
+    }
+});
+
+
+// 4. Update User
+router.put('/update', function(req, res){
+    // Validation
+	req.checkBody('_id', 'User id is required!').notEmpty();
+
+	var errors = req.validationErrors();
+	if (errors){
+		res.status(495).send(errors);
+    }
+	else {
+
+        var user = new User();
+        user._id = req.body._id;
+		user.fullname = req.body.fullname;
+        user.birthdate = req.body.birthdate;
+        user.username = req.body.username;
+        user.password = req.body.password;
+        user.phone = req.body.phone;
+        user.email = req.body.email;
+        // ToDo user.photoid = req.body.photoid;
+
+		User.updateUser(user, function (err, uUser) {
+			if (err)
+				throw err;
+			else if (uUser)
+                res.status(200).send(uUser); // Return back the updated data
+			else
+				res.status(401).send("User updated not ok");
+		});
     }
 });
 
