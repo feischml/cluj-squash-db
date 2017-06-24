@@ -14,6 +14,7 @@ router.post('/register', function(req, res){
     req.checkBody('username', 'Username is required!').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
+    // ToDo Check - roleIds also
 
     var errors = req.validationErrors();
 
@@ -27,6 +28,7 @@ router.post('/register', function(req, res){
         user.password = req.body.password;
         user.phone = req.body.phone;
         user.email = req.body.email;
+        user.roleIds = req.body.roleIds;
         // ToDo user.photoid = req.body.photoid;
 
         User.createUser(user, function(err, cUser){
@@ -88,6 +90,7 @@ router.put('/update', function(req, res){
         user.password = req.body.password;
         user.phone = req.body.phone;
         user.email = req.body.email;
+        user.roleIds = req.body.roleIds;
         // ToDo user.photoid = req.body.photoid;
 
 		User.updateUser(user, function (err, uUser) {

@@ -19,6 +19,7 @@ router.post('/create', function(req, res){
         role.roletype       = req.body.roletype;
 		role.name           = req.body.name;
 		role.description    = req.body.description;
+        role.admin          = req.body.admin;
 
         Role.createRole(role, function(err, cRole){
             if (err)
@@ -48,6 +49,7 @@ router.put('/update', function(req, res){
 		role.name           = req.body.name;
 		role.description    = req.body.description;
 		role.roletype       = req.body.roletype;
+        role.admin          = req.body.admin;
 
 		Role.updateRole(role, function (err, uRole) {
 			if (err)
