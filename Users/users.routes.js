@@ -14,7 +14,8 @@ router.post('/register', function(req, res){
     req.checkBody('username', 'Username is required!').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
-    // ToDo Check - roleIds also
+    req.checkBody('roleIds', 'At least basic User Role is required').notEmpty();
+    // Todo photoId validation
 
     var errors = req.validationErrors();
 
