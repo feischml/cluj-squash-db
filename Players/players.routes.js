@@ -9,7 +9,7 @@ var User = require('../Users/users.controller');
 
 // 2. Get Players - http://localhost:3000/players/players
 router.get('/players', function(req, res){
-    Player.getPlayer(function(err, players){
+    Player.getPlayers(function(err, players){
         if (err){
             res.status(495).send(err);
             console.log(err);
@@ -20,7 +20,7 @@ router.get('/players', function(req, res){
 });
 
 // 3. Get Player by ID - http://localhost:3000/players/playerid/:idToSearchForInDb
-router.get('/player/:id', function(req, res){
+router.get('/playerid/:id', function(req, res){
     // Validation: req.params = { id: 'idToSearchForInDb' };
 	req.checkParams('id', 'Player id is required!').notEmpty().isHexadecimal();
 
@@ -69,13 +69,13 @@ router.put('/update', function(req, res){
 // -> see User / delete; If a User is deleted, if the User has Player roles, it should be deleted
 // -> from Players table
 
-function executePlahyerDbQuery(query, res){
+function executePlayerDbQuery(query, res){
     Player.getPlayer(query, function(err, player){
             if (err)
                 console.log(err);
             else{
                 if (!player)
-                    res.status(495).send("Coach not found!");
+                    res.status(495).send("Player not found!");
                 else {
                     // Get also the User 
                     var query = { _id: player.userId };
