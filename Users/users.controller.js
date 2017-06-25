@@ -29,3 +29,8 @@ module.exports.getUser = function (options, callback) {
 module.exports.getUsers = function (users, callback) {
 	UsersSchema.find(users, callback);
 }
+
+// Delete User
+module.exports.deleteUser = function(user, callback) {
+	UsersSchema.findByIdAndRemove(user, callback);
+}

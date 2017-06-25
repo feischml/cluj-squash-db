@@ -2,8 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('./users.controller');
+var Player = require('../Players/players.controller');
+var Coach = require('../Coaches/coaches.controller');
+var Role = require('../Roles/roles.controller');
+var roleConstants = require('../Roles/roles.constants');
 
-// 1. Create a user (Sign-Up)
+// 1. Create a user (Sign-Up) and also based on the selected Roles(Player/Coach) the necessary data entry
 router.post('/register', function(req, res){
 
     console.log(req.body);
@@ -35,10 +39,12 @@ router.post('/register', function(req, res){
         User.createUser(user, function(err, cUser){
             if (err)
                 res.status(495).send(err);
-            else if (cUser)
-                res.status(200).send(cUser);
-            else    
+            else if (cUser){
+                // User creation successfull - do the rest
+                createPlayerCoach(cUser, res); 
+            } else {    
                 res.status(495).send('User creation failed!');
+            }
         })
     }
 
@@ -105,6 +111,32 @@ router.put('/update', function(req, res){
     }
 });
 
+// 5. Delete User
+router.delete('/delete/:id', function(req, res){
+    // Validation
+    req.checkParams('id', 'User id is required!').notEmpty().isHexadecimal();
+
+    var errors = req.validationErrors();
+    if(errors){
+        res.status(495).send(errors);
+    }else{
+         let userId = req.params.id;
+         User.deleteUser(userId, function(err,dUser){
+             if(err){
+                 res.status(495).send(err);
+             }else{
+                 if(!dUser){
+                    res.status(495).send("User could not be deleted!");
+                 }else{
+                     // Delete also Player and Coach if these roles are present
+                     deletePlayerCoach(dUser, res);
+                 }
+             }
+        });
+    }
+});
+
+// Execute DB query based on given conditions
 function executeUserDbQuery(query, res){
     User.getUser(query, function(err, user){
             if (err)
@@ -117,6 +149,102 @@ function executeUserDbQuery(query, res){
                 }
             }    
         });
+};
+
+// Create Player/Coach table entry
+function createPlayerCoach(cUser, res){
+    let roles = cUser.roleIds;
+    var createStatus = true; // we assume that everything will go well
+    roles.forEach(function(element) {
+        if (element){
+            let query = { _id: element};
+            Role.getRole(query, function(err, role){
+                if (err)
+                    console.log(err);
+                else{
+                    if (!role){
+                        res.status(495).send("Role not found!");
+                        return;
+                    } else {
+                        switch(role.roletype) {
+                            // Create Player
+                            case roleConstants.playerRoleType:
+                                var player = new Player();
+                                player.userId = cUser._id;
+                                Player.createPlayer(player, function(err, cPlayer){
+                                    if (err)
+                                        throw err;
+                                    else if (!cPlayer) // Player creation went wrong
+                                        createStatus = false;
+                                });
+                                break;
+                            // Create Coach
+                            case roleConstants.coachRoleType:
+                                var coach = new Coach();
+                                coach.userId = cUser._id;
+                                Coach.createCoach(coach, function(err, cCoach){
+                                    if (err)
+                                        throw err;
+                                    else if (!cCoach) // Coach creation went wrong
+                                        createStatus = false;
+                                });
+                                break;
+                        }
+                    }
+                }    
+            });
+        }
+    }, this);
+    if (createStatus == true)
+        res.status(200).send(cUser);
+    else
+        res.status(400).send("User registration went wrong");
+};
+
+// Delete Player/Coach table entry based on User role
+function deletePlayerCoach(dUser, res){
+    let roles = dUser.roleIds;
+    var deleteStatus = true; // we assume that everything will go well
+    roles.forEach(function(element) {
+        if (element){
+            let query = { _id: element};
+            Role.getRole(query, function(err, role){
+                if (err)
+                    console.log(err);
+                else{
+                    if (!role){
+                        res.status(495).send("Role not found!");
+                        return;
+                    } else {
+                        switch(role.roletype) {
+                            // Delete Player
+                            case roleConstants.playerRoleType:
+                                Player.deletePlayerByUserId(dUser, function(err, dPlayer){
+                                    if (err)
+                                        throw err;
+                                    else if (!dPlayer) // Player deletation went wrong
+                                        deleteStatus = false;
+                                });
+                                break;
+                            // Delete Coach
+                            case roleConstants.coachRoleType:
+                                Coach.deleteCoachByUserId(dUser, function(err, dCoach){
+                                    if (err)
+                                        throw err;
+                                    else if (!dCoach) // Coach deletation went wrong
+                                        deleteStatus = false;
+                                });
+                                break;
+                        }
+                    }
+                }    
+            });
+        }
+    }, this);
+    if (deleteStatus == true)
+        res.status(200).send(dUser);
+    else
+        es.status(400).send("User deletation went wrong");
 }
 
 // Export Router

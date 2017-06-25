@@ -3,14 +3,14 @@ let mongoose = require('mongoose');
 let coachesSchema = mongoose.Schema({
     achivementdescription:{
         type: String,
-        required: true
     },
     experiencedescription:{
         type: String,
-        required: true
     },
-    user:{
+    userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }
 });
+
+module.exports = mongoose.model('coach', coachesSchema, 'coaches');
