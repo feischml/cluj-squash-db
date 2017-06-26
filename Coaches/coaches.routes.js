@@ -12,9 +12,8 @@ router.get('/coaches', function(req, res){
     Coach.getCoaches(function(err, coaches){
         if (err){
             res.status(495).send(err);
-            console.log(err);
         } else {
-            res.send(coaches); 
+            res.status(200).send(coaches); 
         }  
     })
 });
@@ -54,7 +53,7 @@ router.put('/update', function(req, res){
 
 		Coach.updateCoach(coach, function (err, uCoach) {
 			if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (uCoach)
                 res.status(200).send(uCoach); // Return back the updated data
 			else
@@ -70,7 +69,7 @@ router.put('/update', function(req, res){
 function executeCoachDbQuery(query, res){
     Coach.getCoach(query, function(err, coach){
             if (err)
-                console.log(err);
+                res.status(495).send(err);
             else{
                 if (!coach)
                     res.status(495).send("Coach not found!");
@@ -79,7 +78,7 @@ function executeCoachDbQuery(query, res){
                     var query = { _id: coach.userId };
                     User.getUser(query, function(err, user){
                         if (err)
-                            console.log(err);
+                            res.status(495).send(err);
                         else{
                             if (!user)
                                 res.status(495).send("Coach/User not found!");
@@ -87,7 +86,7 @@ function executeCoachDbQuery(query, res){
                                 var coachUser = {};
                                 coachUser.coach = coach;
                                 coachUser.user = user;
-                                res.send(coachUser);
+                                res.status(200).send(coachUser);
                             }
                         }    
                     });

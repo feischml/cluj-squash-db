@@ -12,9 +12,8 @@ router.get('/players', function(req, res){
     Player.getPlayers(function(err, players){
         if (err){
             res.status(495).send(err);
-            console.log(err);
         } else {
-            res.send(players); 
+            res.status(200).send(players); 
         }  
     })
 });
@@ -56,7 +55,7 @@ router.put('/update', function(req, res){
 
 		Player.updatePlayer(player, function (err, uPlayer) {
 			if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (uPlayer)
                 res.status(200).send(uPlayer); // Return back the updated data
 			else
@@ -72,7 +71,7 @@ router.put('/update', function(req, res){
 function executePlayerDbQuery(query, res){
     Player.getPlayer(query, function(err, player){
             if (err)
-                console.log(err);
+                res.status(495).send(err);
             else{
                 if (!player)
                     res.status(495).send("Player not found!");
@@ -81,7 +80,7 @@ function executePlayerDbQuery(query, res){
                     var query = { _id: player.userId };
                     User.getUser(query, function(err, user){
                         if (err)
-                            console.log(err);
+                            res.status(495).send(err);
                         else{
                             if (!user)
                                 res.status(495).send("Player/User not found!");
@@ -89,7 +88,7 @@ function executePlayerDbQuery(query, res){
                                 var playerUser = {};
                                 playerUser.player = player;
                                 playerUser.user = user;
-                                res.send(playerUser);
+                                res.status(200).send(playerUser);
                             }
                         }    
                     });

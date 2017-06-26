@@ -13,7 +13,6 @@ router.post('/create', function(req, res){
     var errors = req.validationErrors();
     if (errors){
         res.status(495).send(errors);
-        console.log(errors);
     } else {
         var role = new Role();
         role.roletype       = req.body.roletype;
@@ -23,7 +22,7 @@ router.post('/create', function(req, res){
 
         Role.createRole(role, function(err, cRole){
             if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (cRole)
                 res.status(200).send(cRole); // Return back the created data
 			else
@@ -41,7 +40,6 @@ router.put('/update', function(req, res){
 	var errors = req.validationErrors();
 	if (errors){
 		res.status(495).send(errors);
-        console.log(errors);
     }
 	else {
         var role = new Role();
@@ -53,7 +51,7 @@ router.put('/update', function(req, res){
 
 		Role.updateRole(role, function (err, uRole) {
 			if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (uRole)
                 res.status(200).send(uRole); // Return back the updated data
 			else
@@ -68,7 +66,7 @@ router.get('/roles', function(req, res){
         if (err){
             res.status(495).send(err);
         } else {
-            res.send(roles); 
+            res.status(200).send(roles); 
         }  
     })
 });
@@ -82,7 +80,6 @@ router.get('/roleid/:id', function(req, res){
     var errors = req.validationErrors();
     if (errors){
         res.status(495).send(errors);
-        console.log(errors);
     } else {   
         var query = { _id: req.params.id };
         executeRoleDbQuery(query, res);
@@ -92,17 +89,16 @@ router.get('/roleid/:id', function(req, res){
 function executeRoleDbQuery(query, res){
     Role.getRole(query, function(err, role){
             if (err)
-                console.log(err);
+                res.status(495).send(err);
             else{
                 if (!role)
                     res.status(495).send("Role not found!");
                 else {
-                    res.send(role);  
+                    res.status(200).send(role);  
                 }
             }    
         });
 }
-
 
 // Export Router
 module.exports = router;

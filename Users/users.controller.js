@@ -31,6 +31,6 @@ module.exports.getUsers = function (users, callback) {
 }
 
 // Delete User
-module.exports.deleteUser = function(user, callback) {
-	UsersSchema.findByIdAndRemove(user, callback);
+module.exports.deleteUser = function(userId, callback) {
+	UsersSchema.findByIdAndRemove(userId, callback);
 }

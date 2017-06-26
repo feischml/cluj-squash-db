@@ -14,7 +14,6 @@ router.post('/create', function(req, res){
     var errors = req.validationErrors();
     if (errors){
         res.status(495).send(errors);
-        console.log(errors);
     } else {
         var club = new Club();
         club.clubname       = req.body.clubname;
@@ -25,7 +24,7 @@ router.post('/create', function(req, res){
 
         Club.createClub(club, function(err, cClub){
             if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (cClub)
                 res.status(200).send(cClub); // Return back the created data
 			else
@@ -43,7 +42,6 @@ router.put('/update', function(req, res){
 	var errors = req.validationErrors();
 	if (errors){
 		res.status(495).send(errors);
-        console.log(errors);
     }
 	else {
         var club = new Club();
@@ -56,7 +54,7 @@ router.put('/update', function(req, res){
 
 		Club.updateClub(club, function (err, uClub) {
 			if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (uClub)
                 res.status(200).send(uClub); // Return back the updated data
 			else
@@ -71,7 +69,7 @@ router.get('/clubs', function(req, res){
         if (err){
             res.status(495).send(err);
         } else {
-            res.send(clubs); 
+            res.status(200).send(clubs); 
         }  
     })
 });
@@ -84,8 +82,7 @@ router.get('/clubname/:name', function(req,res){
     // Check validation error
     var errors = req.validationErrors();
     if (errors){
-        res.status(495).send(errors);
-        console.log(errors);    
+        res.status(495).send(errors);   
     } else {
         var query = { clubname: req.params.name };    
         executeClubDbQuery(query, res);
@@ -101,7 +98,6 @@ router.get('/clubid/:id', function(req, res){
     var errors = req.validationErrors();
     if (errors){
         res.status(495).send(errors);
-        console.log(errors);
     } else {   
         var query = { _id: req.params.id };
         executeClubDbQuery(query, res);
@@ -111,12 +107,12 @@ router.get('/clubid/:id', function(req, res){
 function executeClubDbQuery(query, res){
     Club.getClub(query, function(err, club){
             if (err)
-                console.log(err);
+                res.status(495).send(err);
             else{
                 if (!club)
                     res.status(495).send("Club not found!");
                 else {
-                    res.send(club);  
+                    res.status(200).send(club);  
                 }
             }    
         });

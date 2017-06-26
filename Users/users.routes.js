@@ -9,9 +9,6 @@ var roleConstants = require('../Roles/roles.constants');
 
 // 1. Create a user (Sign-Up) and also based on the selected Roles(Player/Coach) the necessary data entry
 router.post('/register', function(req, res){
-
-    console.log(req.body);
-
     // Validations
     req.checkBody('fullname', 'Fullname is required!').notEmpty();
     req.checkBody('birthdate', 'Birthdate is required!').notEmpty();
@@ -22,7 +19,6 @@ router.post('/register', function(req, res){
     // Todo photoId validation
 
     var errors = req.validationErrors();
-
     if(errors){
         res.status(495).send(errors);
     }else{
@@ -55,9 +51,8 @@ router.get('/users', function(req, res){
     User.getUsers(function(err, users){
         if (err){
             res.status(495).send(err);
-            console.log(err);
         } else {
-            res.send(users); 
+            res.status(200).send(users); 
         }  
     })
 });
@@ -102,7 +97,7 @@ router.put('/update', function(req, res){
 
 		User.updateUser(user, function (err, uUser) {
 			if (err)
-				throw err;
+				res.status(495).send(err);
 			else if (uUser)
                 res.status(200).send(uUser); // Return back the updated data
 			else
@@ -140,12 +135,12 @@ router.delete('/delete/:id', function(req, res){
 function executeUserDbQuery(query, res){
     User.getUser(query, function(err, user){
             if (err)
-                console.log(err);
+                res.status(495).send(err);
             else{
                 if (!user)
                     res.status(495).send("User not found!");
                 else {
-                    res.send(user);  
+                    res.status(200).send(user);  
                 }
             }    
         });
@@ -160,7 +155,7 @@ function createPlayerCoach(cUser, res){
             let query = { _id: element};
             Role.getRole(query, function(err, role){
                 if (err)
-                    console.log(err);
+                    res.status(495).send(err);
                 else{
                     if (!role){
                         res.status(495).send("Role not found!");
@@ -173,7 +168,7 @@ function createPlayerCoach(cUser, res){
                                 player.userId = cUser._id;
                                 Player.createPlayer(player, function(err, cPlayer){
                                     if (err)
-                                        throw err;
+                                        res.status(495).send(err);
                                     else if (!cPlayer) // Player creation went wrong
                                         createStatus = false;
                                 });
@@ -184,7 +179,7 @@ function createPlayerCoach(cUser, res){
                                 coach.userId = cUser._id;
                                 Coach.createCoach(coach, function(err, cCoach){
                                     if (err)
-                                        throw err;
+                                        res.status(495).send(err);
                                     else if (!cCoach) // Coach creation went wrong
                                         createStatus = false;
                                 });
@@ -210,7 +205,7 @@ function deletePlayerCoach(dUser, res){
             let query = { _id: element};
             Role.getRole(query, function(err, role){
                 if (err)
-                    console.log(err);
+                    res.status(495).send(err);
                 else{
                     if (!role){
                         res.status(495).send("Role not found!");
@@ -221,7 +216,7 @@ function deletePlayerCoach(dUser, res){
                             case roleConstants.playerRoleType:
                                 Player.deletePlayerByUserId(dUser, function(err, dPlayer){
                                     if (err)
-                                        throw err;
+                                        res.status(495).send(err);
                                     else if (!dPlayer) // Player deletation went wrong
                                         deleteStatus = false;
                                 });
@@ -230,7 +225,7 @@ function deletePlayerCoach(dUser, res){
                             case roleConstants.coachRoleType:
                                 Coach.deleteCoachByUserId(dUser, function(err, dCoach){
                                     if (err)
-                                        throw err;
+                                        res.status(495).send(err);
                                     else if (!dCoach) // Coach deletation went wrong
                                         deleteStatus = false;
                                 });
@@ -244,7 +239,7 @@ function deletePlayerCoach(dUser, res){
     if (deleteStatus == true)
         res.status(200).send(dUser);
     else
-        es.status(400).send("User deletation went wrong");
+        res.status(400).send("User deletation went wrong");
 }
 
 // Export Router

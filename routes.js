@@ -3,6 +3,7 @@ var userRouter = require('./Users/users.routes');
 var roleRouter = require('./Roles/roles.routes');
 var playerRouter = require('./Players/players.routes');
 var coachRouter = require('./Coaches/coaches.routes');
+var associationRouter = require('./Associations/associations.routes');
 
 function initRoutes(app){
     // Add Club router to Express App
@@ -15,6 +16,8 @@ function initRoutes(app){
     app.use('/players', playerRouter);
     // Add Coaches routes to Express App
     app.use('/coaches', coachRouter);
+    // Add Association routes to Express App
+    app.use('/associations', associationRouter);
 }
 
 module.exports.initRoutes = initRoutes;
