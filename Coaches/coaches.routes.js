@@ -10,11 +10,10 @@ var User = require('../Users/users.controller');
 // 2. Get Coaches - http://localhost:3000/coaches/coaches
 router.get('/coaches', function(req, res){
     Coach.getCoaches(function(err, coaches){
-        if (err){
+        if (err)
             res.status(495).send(err);
-        } else {
+        else
             res.status(200).send(coaches); 
-        }  
     })
 });
 
@@ -25,9 +24,9 @@ router.get('/coachid/:id', function(req, res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {   
+    else {  
         var query = { _id: req.params.id };
         executeCoachDbQuery(query, res);
     }
@@ -40,11 +39,9 @@ router.put('/update', function(req, res){
 	req.checkBody('_id', 'Coach id is required!').notEmpty();
 
 	var errors = req.validationErrors();
-	if (errors){
+	if (errors)
 		res.status(495).send(errors);
-    }
 	else {
-
         var coach = new Coach();
         coach._id = req.body._id;
 		coach.achivementdescription = req.body.achivementdescription;
@@ -70,8 +67,7 @@ function executeCoachDbQuery(query, res){
     Coach.getCoach(query, function(err, coach){
             if (err)
                 res.status(495).send(err);
-            else{
-                if (!coach)
+            else if (!coach)
                     res.status(495).send("Coach not found!");
                 else {
                     // Get also the User 
@@ -79,19 +75,16 @@ function executeCoachDbQuery(query, res){
                     User.getUser(query, function(err, user){
                         if (err)
                             res.status(495).send(err);
-                        else{
-                            if (!user)
+                        else if (!user)
                                 res.status(495).send("Coach/User not found!");
                             else {
                                 var coachUser = {};
                                 coachUser.coach = coach;
                                 coachUser.user = user;
                                 res.status(200).send(coachUser);
-                            }
-                        }    
+                            }    
                     });
-                }
-            }    
+                }  
         });
 }
 

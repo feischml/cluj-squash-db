@@ -12,9 +12,9 @@ router.post('/create', function(req, res){
     req.checkBody('description', 'Description is required').notEmpty();
 
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {
+    else {
         var club = new Club();
         club.clubname       = req.body.clubname;
 		club.description    = req.body.description;
@@ -30,7 +30,6 @@ router.post('/create', function(req, res){
 			else
 				res.status(400).send("Club not created");
         });
-
     }
 });
 
@@ -40,9 +39,8 @@ router.put('/update', function(req, res){
 	req.checkBody('_id', 'Club id is required!').notEmpty();
 
 	var errors = req.validationErrors();
-	if (errors){
+	if (errors)
 		res.status(495).send(errors);
-    }
 	else {
         var club = new Club();
 		club._id            = req.body._id;
@@ -66,11 +64,10 @@ router.put('/update', function(req, res){
 // 2. Get Clubs - http://localhost:3000/clubs/clubs
 router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
-        if (err){
+        if (err)
             res.status(495).send(err);
-        } else {
+        else 
             res.status(200).send(clubs); 
-        }  
     })
 });
 
@@ -81,9 +78,9 @@ router.get('/clubname/:name', function(req,res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);   
-    } else {
+    else {
         var query = { clubname: req.params.name };    
         executeClubDbQuery(query, res);
     }
@@ -96,9 +93,9 @@ router.get('/clubid/:id', function(req, res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {   
+    else {
         var query = { _id: req.params.id };
         executeClubDbQuery(query, res);
     }
@@ -106,16 +103,13 @@ router.get('/clubid/:id', function(req, res){
 
 function executeClubDbQuery(query, res){
     Club.getClub(query, function(err, club){
-            if (err)
-                res.status(495).send(err);
-            else{
-                if (!club)
-                    res.status(495).send("Club not found!");
-                else {
-                    res.status(200).send(club);  
-                }
-            }    
-        });
+        if (err)
+            res.status(495).send(err);
+        else if (!club)
+            res.status(495).send("Club not found!");
+        else 
+            res.status(200).send(club);   
+    });
 }
 
 // Export Router

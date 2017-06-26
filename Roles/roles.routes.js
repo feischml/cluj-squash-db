@@ -11,9 +11,9 @@ router.post('/create', function(req, res){
     req.checkBody('description', 'Description is required!').notEmpty();
 
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {
+    else {
         var role = new Role();
         role.roletype       = req.body.roletype;
 		role.name           = req.body.name;
@@ -38,9 +38,8 @@ router.put('/update', function(req, res){
 	req.checkBody('_id', 'Role id is required!').notEmpty();
 
 	var errors = req.validationErrors();
-	if (errors){
+	if (errors)
 		res.status(495).send(errors);
-    }
 	else {
         var role = new Role();
 		role._id            = req.body._id;
@@ -63,11 +62,10 @@ router.put('/update', function(req, res){
 // 2. Get Roles - http://localhost:3000/roles/roles
 router.get('/roles', function(req, res){
     Role.getRoles(function(err, roles){
-        if (err){
+        if (err)
             res.status(495).send(err);
-        } else {
+        else 
             res.status(200).send(roles); 
-        }  
     })
 });
 
@@ -78,9 +76,9 @@ router.get('/roleid/:id', function(req, res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {   
+    else {   
         var query = { _id: req.params.id };
         executeRoleDbQuery(query, res);
     }
@@ -90,13 +88,10 @@ function executeRoleDbQuery(query, res){
     Role.getRole(query, function(err, role){
             if (err)
                 res.status(495).send(err);
-            else{
-                if (!role)
-                    res.status(495).send("Role not found!");
-                else {
-                    res.status(200).send(role);  
-                }
-            }    
+            else if (!role)
+                res.status(495).send("Role not found!");
+            else 
+                res.status(200).send(role);    
         });
 }
 

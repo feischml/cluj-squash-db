@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var Assotiation = require('./associations.controller');
+var Association = require('./associations.controller');
 
-// 1. Create an Assotiation 
+// 1. Create an Association 
 router.post('/create', function(req, res){
     // Validation
     req.checkBody('name', 'Type is required!').notEmpty();
@@ -11,21 +11,21 @@ router.post('/create', function(req, res){
     req.checkBody('description', 'Description is required!').notEmpty();
 
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {
-        var association = new Assotiation();
+    else {
+        var association = new Association();
         association.webpage      = req.body.webpage;
 		association.name         = req.body.name;
 		association.description  = req.body.description;
 
-        Assotiation.createAssociation(association, function(err, cAssociation){
+        Association.createAssociation(association, function(err, cAssociation){
             if (err)
 				res.status(495).send(err);
 			else if (cAssociation)
                 res.status(200).send(cAssociation); // Return back the created data
-			else
-				res.status(400).send("Associatyion not created");
+            else
+				res.status(400).send("Association not created");
         });
 
     }
@@ -34,12 +34,13 @@ router.post('/create', function(req, res){
 
 // 2. Get Associations - http://localhost:3000/associations/associations
 router.get('/associations', function(req, res){
-    Assotiation.getAssociations(function(err, associations){
-        if (err){
+    Association.getAssociations(function(err, associations){
+        if (err)
             res.status(495).send(err);
-        } else {
-            res.send(associations); 
-        }  
+        else if (associations)
+            res.status(200).send(associations); 
+        else 
+            res.status(401).send("Associations not found"); 
     })
 });
 
@@ -50,11 +51,11 @@ router.get('/associationid/:id', function(req, res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {   
+    else {   
         var query = { _id: req.params.id };
-        executeAssotiationDbQuery(query, res);
+        executeAssociationDbQuery(query, res);
     }
 });
 
@@ -65,18 +66,16 @@ router.put('/update', function(req, res){
 	req.checkBody('_id', 'Association id is required!').notEmpty();
 
 	var errors = req.validationErrors();
-	if (errors){
+	if (errors)
 		res.status(495).send(errors);
-    }
 	else {
-
-        var association = new Assotiation();
+        var association = new Association();
         association._id = req.body._id;
 		association.webpage = req.body.webpage;
         association.description = req.body.description;
         association.name = req.body.name;
 
-		Assotiation.updateAssociation(association, function (err, uAssociation) {
+		Association.updateAssociation(association, function (err, uAssociation) {
 			if (err)
 				res.status(495).send(err);
 			else if (uAssociation)
@@ -93,36 +92,30 @@ router.delete('/delete/:id', function(req, res){
     req.checkParams('id', 'Association id is required!').notEmpty().isHexadecimal();
 
     var errors = req.validationErrors();
-    if(errors){
+    if(errors)
         res.status(495).send(errors);
-    }else{
+    else{
          let associationId = req.params.id;
-         Assotiation.deleteAssociationById(associationId, function(err,dAssociation){
-             if(err){
+         Association.deleteAssociationById(associationId, function(err,dAssociation){
+            if(err)
                  res.status(495).send(err);
-             }else{
-                 if(!dAssociation){
-                    res.status(495).send("Association could not be deleted!");
-                 }else{
-                    res.status(200).send(dAssociation);
-                 }
-             }
+            else if(!dAssociation)
+                res.status(495).send("Association could not be deleted!");
+            else
+                res.status(200).send(dAssociation);
         });
     }
 });
 
-function executeAssotiationDbQuery(query, res){
+function executeAssociationDbQuery(query, res){
     Association.getAssociation(query, function(err, association){
-            if (err)
-                res.status(495).send(err);
-            else{
-                if (!coach)
-                    res.status(495).send("Association not found!");
-                else {
-                    res.status(200).send(association);
-                }
-            }    
-        });
+        if (err)
+            res.status(495).send(err);
+        else if (!association)
+            res.status(495).send("Association not found!");
+        else 
+            res.status(200).send(association);
+    });
 }
 
 // Export Router

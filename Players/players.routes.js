@@ -10,11 +10,10 @@ var User = require('../Users/users.controller');
 // 2. Get Players - http://localhost:3000/players/players
 router.get('/players', function(req, res){
     Player.getPlayers(function(err, players){
-        if (err){
+        if (err)
             res.status(495).send(err);
-        } else {
+        else 
             res.status(200).send(players); 
-        }  
     })
 });
 
@@ -25,9 +24,9 @@ router.get('/playerid/:id', function(req, res){
 
     // Check validation error
     var errors = req.validationErrors();
-    if (errors){
+    if (errors)
         res.status(495).send(errors);
-    } else {   
+    else {   
         var query = { _id: req.params.id };
         executePlayerDbQuery(query, res);
     }
@@ -40,11 +39,9 @@ router.put('/update', function(req, res){
 	req.checkBody('_id', 'Player id is required!').notEmpty();
 
 	var errors = req.validationErrors();
-	if (errors){
+	if (errors)
 		res.status(495).send(errors);
-    }
 	else {
-
         var player = new Player();
         player._id = req.body._id;
 		player.bestlocalranking = req.body.bestlocalranking;
@@ -81,16 +78,14 @@ function executePlayerDbQuery(query, res){
                     User.getUser(query, function(err, user){
                         if (err)
                             res.status(495).send(err);
-                        else{
-                            if (!user)
+                        else if (!user)
                                 res.status(495).send("Player/User not found!");
                             else {
                                 var playerUser = {};
                                 playerUser.player = player;
                                 playerUser.user = user;
                                 res.status(200).send(playerUser);
-                            }
-                        }    
+                            }  
                     });
                 }
             }    
