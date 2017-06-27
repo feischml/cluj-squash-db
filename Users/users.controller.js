@@ -34,3 +34,8 @@ module.exports.getUsers = function (users, callback) {
 module.exports.deleteUser = function(userId, callback) {
 	UsersSchema.findByIdAndRemove(userId, callback);
 }
+
+// Login User
+module.exports.loginUser = function(user, callback) {
+	//ToDo
+}
