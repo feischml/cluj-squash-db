@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var resultHandler = require('../response.handler');
 var User = require('./users.controller');
 var Player = require('../Players/players.controller');
 var Coach = require('../Coaches/coaches.controller');
@@ -42,16 +42,12 @@ router.post('/register', function (req, res) {
                 res.status(495).send('User creation failed!');
         })
     }
-
 });
 
 // 2. Get Users - http://localhost:3000/users/users
 router.get('/users', function (req, res) {
     User.getUsers(function (err, users) {
-        if (err)
-            res.status(495).send(err);
-        else
-            res.status(200).send(users);
+        resultHandler.handleResult(err,res,users,"Users not found!");
     })
 });
 
@@ -92,12 +88,7 @@ router.put('/update', function (req, res) {
         // ToDo user.photoid = req.body.photoid;
 
         User.updateUser(user, function (err, uUser) {
-            if (err)
-                res.status(495).send(err);
-            else if (uUser)
-                res.status(200).send(uUser); // Return back the updated data
-            else
-                res.status(401).send("User updated not ok");
+            resultHandler.handleResult(err,res,uUser,"User update not ok!");
         });
     }
 });
@@ -127,12 +118,7 @@ router.delete('/delete/:id', function (req, res) {
 // Execute DB query based on given conditions
 function executeUserDbQuery(query, res) {
     User.getUser(query, function (err, user) {
-        if (err)
-            res.status(495).send(err);
-        else if (!user)
-            res.status(495).send("User not found!");
-        else
-            res.status(200).send(user);
+        resultHandler.handleResult(err,res,user,"User not found!");
     });
 };
 
@@ -231,4 +217,3 @@ function deletePlayerCoach(dUser, res) {
 
 // Export Router
 module.exports = router;
-

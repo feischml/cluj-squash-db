@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var resultHandler = require('../response.handler');
 var Association = require('./associations.controller');
 
 // 1. Create an Association 
@@ -20,27 +20,15 @@ router.post('/create', function(req, res){
 		association.description  = req.body.description;
 
         Association.createAssociation(association, function(err, cAssociation){
-            if (err)
-				res.status(495).send(err);
-			else if (cAssociation)
-                res.status(200).send(cAssociation); // Return back the created data
-            else
-				res.status(400).send("Association not created");
+            resultHandler.handleResult(err,res,cAssociation,"Association not created");
         });
-
     }
 });
-
 
 // 2. Get Associations - http://localhost:3000/associations/associations
 router.get('/associations', function(req, res){
     Association.getAssociations(function(err, associations){
-        if (err)
-            res.status(495).send(err);
-        else if (associations)
-            res.status(200).send(associations); 
-        else 
-            res.status(401).send("Associations not found"); 
+        resultHandler.handleResult(err,res,associations,"Associations not found");
     })
 });
 
@@ -48,7 +36,6 @@ router.get('/associations', function(req, res){
 router.get('/associationid/:id', function(req, res){
     // Validation: req.params = { id: 'idToSearchForInDb' };
 	req.checkParams('id', 'Association id is required!').notEmpty().isHexadecimal();
-
     // Check validation error
     var errors = req.validationErrors();
     if (errors)
@@ -76,12 +63,7 @@ router.put('/update', function(req, res){
         association.name = req.body.name;
 
 		Association.updateAssociation(association, function (err, uAssociation) {
-			if (err)
-				res.status(495).send(err);
-			else if (uAssociation)
-                res.status(200).send(uAssociation); // Return back the updated data
-			else
-				res.status(401).send("Coach updated not ok");
+            resultHandler.handleResult(err,res,uAssociation,"Association updated not ok");
 		});
     }
 });
@@ -97,27 +79,16 @@ router.delete('/delete/:id', function(req, res){
     else{
          let associationId = req.params.id;
          Association.deleteAssociationById(associationId, function(err,dAssociation){
-            if(err)
-                 res.status(495).send(err);
-            else if(!dAssociation)
-                res.status(495).send("Association could not be deleted!");
-            else
-                res.status(200).send(dAssociation);
+            resultHandler.handleResult(err,res,dAssociation,"Association could not be deleted!");
         });
     }
 });
 
 function executeAssociationDbQuery(query, res){
     Association.getAssociation(query, function(err, association){
-        if (err)
-            res.status(495).send(err);
-        else if (!association)
-            res.status(495).send("Association not found!");
-        else 
-            res.status(200).send(association);
+        resultHandler.handleResult(err,res,association,"Association not found!");
     });
 }
 
 // Export Router
 module.exports = router;
-
