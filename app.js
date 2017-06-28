@@ -7,6 +7,7 @@ const cors = require('cors');
 const config = require('./config');
 const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 // Add routing to Express App
 var appRouting = require('./routes');
@@ -44,6 +45,11 @@ app.use(expressValidator({
     };
   }
 }));
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Set cors - calls from other apps to be possible
 app.use(cors({ origin: config.origin.url }));
 // Body Parser

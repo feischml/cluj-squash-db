@@ -44,25 +44,6 @@ router.post('/register', function (req, res) {
     }
 });
 
-// 1b. Login User
-router.post('/login', function (req, res) {
-    // Validations
-    req.checkBody('username', 'Username is required!').notEmpty();
-    req.checkBody('password', 'Password is required').notEmpty();
-    // Todo photoId validation
-
-    var errors = req.validationErrors();
-    if (errors)
-        res.status(495).send(errors);
-    else {
-        var user = new User();
-        user.username = req.body.username;
-        user.password = req.body.password;
-
-        // ToDo
-    }
-});
-
 // 2. Get Users - http://localhost:3000/users/users
 router.get('/users', function (req, res) {
     User.getUsers(function (err, users) {

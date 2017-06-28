@@ -25,6 +25,11 @@ module.exports.getUser = function (options, callback) {
 	UsersSchema.findOne(options, callback);
 }
 
+// Get a User with given id
+module.exports.getUserById = function (id, callback) {
+	UsersSchema.findById(id, callback);
+}
+
 // Get all Users
 module.exports.getUsers = function (users, callback) {
 	UsersSchema.find(users, callback);
@@ -35,7 +40,9 @@ module.exports.deleteUser = function(userId, callback) {
 	UsersSchema.findByIdAndRemove(userId, callback);
 }
 
-// Login User
-module.exports.loginUser = function(user, callback) {
-	//ToDo
+// Compare Password
+module.exports.comparePassword = function (password, hash, callback) {
+	bcrypt.compare(password, hash, function (err, match) {
+		callback(err, match);	
+	});
 }
