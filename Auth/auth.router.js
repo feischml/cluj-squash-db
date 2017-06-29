@@ -3,9 +3,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
+var roleConstants = require('../Roles/roles.constants');
 
-// Require User Schema
+// Require User and Role Schema
 var User = require('../Users/users.controller');
+var Role = require('../Roles/roles.controller');
 
 // Define the Local Auth Strategy
 passport.use(new LocalStrategy(
@@ -26,7 +28,7 @@ passport.use(new LocalStrategy(
                 if (err)
                     res.status(495).send(err);
                 else if (match)
-                    return done(null, gUser);
+                    return done(null, gUser)
                 else    
                     return done(null, false, { message: 'Incorrect password!' });  
             });
@@ -46,7 +48,22 @@ function login(req, res, next) {
 				if (err)
 					return next(err);
 				else
-                    res.status(200).send(user);
+                    // Check also if User is Admin
+                    var adminRoleFound = false;
+                    var userRoles = user.roleIds;
+                    userRoles.forEach(function(role) {
+                        if (role){
+                            var query = { _id: role };
+                            Role.getRole(query, function(err,gRole){
+                                if (gRole['roletype'] == roleConstants.adminRoleType){
+                                    adminRoleFound = true;
+                                    res.status(200).send({ user: user, admin: adminRoleFound });
+                                    return;
+                                    // ToDo Async check of roles************************** not admin users are not returned
+                                }
+                            })
+                        }
+                    }, this);
 			});
 		}
     )(req, res, next)
