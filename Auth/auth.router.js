@@ -12,7 +12,6 @@ var Role = require('../Roles/roles.controller');
 // Define the Local Auth Strategy
 passport.use(new LocalStrategy(
 	function (username, password, done) {
-
         var user = new User();
         user.username = username;
         user.password = password;
@@ -20,13 +19,13 @@ passport.use(new LocalStrategy(
         var query = { username: user.username };
         User.getUser(query, function(err, gUser){
             if (err)
-                res.status(495).send(err);
+                return done(err);
             if (!gUser) 
 				return done(null, false, { message: 'User not found!' });
             // Check the Password
             User.comparePassword(user.password, gUser.password, function(err, match){
                 if (err)
-                    res.status(495).send(err);
+                    return done(null, false);
                 else if (match)
                     return done(null, gUser)
                 else    
@@ -43,27 +42,32 @@ function login(req, res, next) {
 			if (err) 
 				return next(err);
 			if (!user)
-                res.status(495).send(info.message)
-			req.logIn(user, function(err){
+                return res.status(495).send(info.message);
+			req.login(user, function(err){
 				if (err)
 					return next(err);
 				else
                     // Check also if User is Admin
                     var adminRoleFound = false;
                     var userRoles = user.roleIds;
-                    userRoles.forEach(function(role) {
-                        if (role){
-                            var query = { _id: role };
-                            Role.getRole(query, function(err,gRole){
-                                if (gRole['roletype'] == roleConstants.adminRoleType){
+                    Role.getRoles(function(err, roles){
+                        if (err)
+                            return next(err);
+                        if (!roles)
+                            return res.status(495).send("Roles not found!");
+                        else{
+                            adminRole = roles.find(function(role){
+                                return role.roletype === roleConstants.adminRoleType
+                            });
+                            if (adminRole){
+                                if ( userRoles.indexOf(adminRole['_id']) >= 0 ) // User has Admin Role
                                     adminRoleFound = true;
-                                    res.status(200).send({ user: user, admin: adminRoleFound });
-                                    return;
-                                    // ToDo Async check of roles************************** not admin users are not returned
-                                }
-                            })
+                                return res.status(200).send({ user: user, admin: adminRoleFound });
+                            } else {
+                                return res.status(495).send("No Admin Role exists!");
+                            }
                         }
-                    }, this);
+                    });
 			});
 		}
     )(req, res, next)
@@ -80,13 +84,16 @@ router.get('/logout', function (req, res){
 
 // Passport needs to be able to serialize and deserialize users to support persistent login sessions
 passport.serializeUser(function (user, done) {
+    console.log("serializing:" + user);
 	if (user) 
         done(null, user._id);
 });
 
 // Desieralize user will call with the unique id provided by serialize user
 passport.deserializeUser(function (id, done) {
+    console.log("id: " + id);
 	User.getUserById(id, function (err, user) {
+        console.log("deserialize: " + user);
 		done(err, user);
 	});
 });

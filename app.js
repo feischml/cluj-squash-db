@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config');
 const expressValidator = require('express-validator');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redis = require("redis");
+const client  = redis.createClient();
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
@@ -28,6 +32,18 @@ db.on('error', function(err){
 
 // Init app
 const app = express();
+
+// Use session for storing the logged user
+app.use(session({
+  store: new RedisStore(
+    { host: 'localhost', port: 6379, client: client,ttl :  260 }
+  ),
+  secret: "SHHH_HHHH",
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge:86400000 }
+}));
+
 // Add Express Validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
@@ -59,7 +75,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-AUTHENTICATION, X-IP, Content-Type, Accept");
   next();
 });
 // Add routers

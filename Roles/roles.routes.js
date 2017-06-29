@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
 var Role = require('./roles.controller');
+var authMiddleware = require('../Auth/auth.middleware');
 
 // 1. Create Role
 router.post('/create', function(req, res){
@@ -49,7 +50,7 @@ router.put('/update', function(req, res){
 });
 
 // 2. Get Roles - http://localhost:3000/roles/roles
-router.get('/roles', function(req, res){
+router.get('/roles', authMiddleware.authenticationMiddleware() ,function(req, res){
     Role.getRoles(function(err, roles){
         resultHandler.handleResult(err,res,roles,"Roles not found!");
     })
