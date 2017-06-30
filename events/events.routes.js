@@ -9,7 +9,7 @@ router.post('/create', function(req, res){
     req.checkBody('name', 'Type is required!').notEmpty();
     req.checkBody('webpage', 'Name is required!').notEmpty();
     req.checkBody('description', 'Description is required!').notEmpty();
-    req.checkBody('date', 'Date of event is required!').notEmpty();
+    req.checkBody('eventdate', 'Date of event is required!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors)
@@ -22,6 +22,7 @@ router.post('/create', function(req, res){
         event.registeruntildate = req.body.registeruntildate;
         event.locationdescription = req.body.locationdescription;
         event.locationwebpage = req.body.locationwebpage;
+        event.eventdate = req.body.eventdate;
         // todo: event.maplocation = req.body.maplocation
 
         Events.createEvent(event, function(err, cEvent){
@@ -68,6 +69,7 @@ router.put('/update', function(req, res){
         event.registeruntildate = req.body.registeruntildate;
         event.locationdescription = req.body.locationdescription;
         event.locationwebpage = req.body.locationwebpage;
+        event.eventdate = req.body.eventdate;
         // todo: event.maplocation = req.body.maplocation
 
 		Events.updateEvent(event, function (err, uEvent) {
@@ -93,7 +95,7 @@ router.delete('/delete/:id', function(req, res){
 });
 
 function executeEventDbQuery(query, res){
-    Events.getAssociation(query, function(err, event){
+    Events.getEvent(query, function(err, event){
         resultHandler.handleResult(err, res, event, "Event not found!");
     });
 }

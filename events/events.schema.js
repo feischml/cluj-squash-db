@@ -16,7 +16,7 @@ let eventSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    date:{
+    eventdate:{
         type: Date,
         required: true
     },
@@ -24,7 +24,7 @@ let eventSchema = mongoose.Schema({
         type: Date,
         required: false
     },
-    locationdescrition:{
+    locationdescription:{
         type: String,
         required: false
     },

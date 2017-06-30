@@ -11,7 +11,7 @@ module.exports.createEvent = function (event, callback) {
 // Update Event
 module.exports.updateEvent = function (event, callback) {
     var cond = { _id: event._id };
-	EventSchema.findOneAndUpdate(cond, event, { new: true }, callback);
+	EventsSchema.findOneAndUpdate(cond, event, { new: true }, callback);
 }
 
 // Get Event
