@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
 var User = require('./users.controller');
-var Player = require('../Players/players.controller');
-var Coach = require('../Coaches/coaches.controller');
-var Role = require('../Roles/roles.controller');
-var roleConstants = require('../Roles/roles.constants');
+var Player = require('../players/players.controller');
+var Coach = require('../coaches/coaches.controller');
+var Role = require('../roles/roles.controller');
+var roleConstants = require('../roles/roles.constants');
 
 // 1. Create a user (Sign-Up) and also based on the selected Roles(Player/Coach) the necessary data entry
 router.post('/register', function (req, res) {
@@ -47,7 +47,7 @@ router.post('/register', function (req, res) {
 // 2. Get Users - http://localhost:3000/users/users
 router.get('/users', function (req, res) {
     User.getUsers(function (err, users) {
-        resultHandler.handleResult(err,res,users,"Users not found!");
+        resultHandler.handleResult(err, res, users, "Users not found!");
     })
 });
 
@@ -88,7 +88,7 @@ router.put('/update', function (req, res) {
         // ToDo user.photoid = req.body.photoid;
 
         User.updateUser(user, function (err, uUser) {
-            resultHandler.handleResult(err,res,uUser,"User update not ok!");
+            resultHandler.handleResult(err, res, uUser, "User update not ok!");
         });
     }
 });
@@ -118,7 +118,7 @@ router.delete('/delete/:id', function (req, res) {
 // Execute DB query based on given conditions
 function executeUserDbQuery(query, res) {
     User.getUser(query, function (err, user) {
-        resultHandler.handleResult(err,res,user,"User not found!");
+        resultHandler.handleResult(err, res, user, "User not found!");
     });
 };
 

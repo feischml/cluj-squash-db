@@ -1,5 +1,3 @@
-console.log("Cluj-Squash-DB running");
-
 // Import mongoose, express, express-validator and cors
 const express = require('express');
 const mongoose = require('mongoose');
@@ -62,15 +60,17 @@ app.use(expressValidator({
   }
 }));
 
-// Passport init
+// Passport Init for authentication process
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Set cors - calls from other apps to be possible
 app.use(cors({ origin: config.origin.url }));
+
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 // Allow Methods
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -78,11 +78,11 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-AUTHENTICATION, X-IP, Content-Type, Accept");
   next();
 });
+
 // Add routers
 appRouting.initRoutes(app);
 
-
-// Start listening to port -> you can start now the localhost:port and see what happens
+// Start listening to port:number; you can start now the localhost:port and see what happens
 app.listen(config.express.port, function(){
     console.log("Server started on port: " + config.express.port);
 });

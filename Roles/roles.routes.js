@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
 var Role = require('./roles.controller');
-var authMiddleware = require('../Auth/auth.middleware');
 
 // 1. Create Role
 router.post('/create', function(req, res){
@@ -22,7 +21,7 @@ router.post('/create', function(req, res){
         role.admin          = req.body.admin;
 
         Role.createRole(role, function(err, cRole){
-            resultHandler.handleResult(err,res,cRole,"Role not created!");
+            resultHandler.handleResult(err, res, cRole, "Role not created!");
         });
     }
 });
@@ -44,15 +43,15 @@ router.put('/update', function(req, res){
         role.admin          = req.body.admin;
 
 		Role.updateRole(role, function (err, uRole) {
-            resultHandler.handleResult(err,res,uRole,"Role update not ok!");
+            resultHandler.handleResult(err, res, uRole, "Role update not ok!");
 		});
     }
 });
 
 // 2. Get Roles - http://localhost:3000/roles/roles
-router.get('/roles', authMiddleware.authenticationMiddleware() ,function(req, res){
+router.get('/roles', function(req, res){
     Role.getRoles(function(err, roles){
-        resultHandler.handleResult(err,res,roles,"Roles not found!");
+        resultHandler.handleResult(err, res, roles, "Roles not found!");
     })
 });
 
@@ -73,7 +72,7 @@ router.get('/roleid/:id', function(req, res){
 
 function executeRoleDbQuery(query, res){
     Role.getRole(query, function(err, role){
-        resultHandler.handleResult(err,res,role,"Role not found!");
+        resultHandler.handleResult(err, res, role, "Role not found!");
     });
 }
 

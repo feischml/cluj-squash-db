@@ -23,7 +23,7 @@ router.post('/create', function(req, res){
         //ToDo: club.location       = req.body.location;
 
         Club.createClub(club, function(err, cClub){
-            resultHandler.handleResult(err,res,cClub,"Club not created!");
+            resultHandler.handleResult(err, res, cClub, "Club not created!");
         });
     }
 });
@@ -46,7 +46,7 @@ router.put('/update', function(req, res){
         club.location       = req.body.location;
 
 		Club.updateClub(club, function (err, uClub) {
-            resultHandler.handleResult(err,res,uClub,"Club update not ok!");
+            resultHandler.handleResult(err, res, uClub, "Club update not ok!");
 		});
     }
 });
@@ -54,12 +54,12 @@ router.put('/update', function(req, res){
 // 2. Get Clubs - http://localhost:3000/clubs/clubs
 router.get('/clubs', function(req, res){
     Club.getClubs(function(err, clubs){
-        resultHandler.handleResult(err,res,clubs,"Clubs not found!");
+        resultHandler.handleResult(err, res, clubs, "Clubs not found!");
     })
 });
 
 // 3. Get Club by clubname - http://localhost:3000/clubs/clubname/:nameToSearchForInDb
-router.get('/clubname/:name', function(req,res){
+router.get('/clubname/:name', function(req, res){
     // Validation: req.params = { name: 'nameToSearchForInDb' };
 	req.checkParams('name', 'Club name is required!').notEmpty().isAlphanumeric();
 
@@ -90,7 +90,7 @@ router.get('/clubid/:id', function(req, res){
 
 function executeClubDbQuery(query, res){
     Club.getClub(query, function(err, club){
-        resultHandler.handleResult(err,res,club,"Club not found!");
+        resultHandler.handleResult(err, res, club, "Club not found!");
     });
 }
 

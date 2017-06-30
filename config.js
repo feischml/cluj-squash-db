@@ -1,3 +1,4 @@
+// Define config object with application constants
 var config = { };
 
 // Config MongooDB - Database name

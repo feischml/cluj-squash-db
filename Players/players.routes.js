@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
 var Player = require('./players.controller');
-var User = require('../Users/users.controller');
+var User = require('../users/users.controller');
 
 // 1. Create a Player (when sign-up is done and Player role is selected) -> see User / register
 
 // 2. Get Players - http://localhost:3000/players/players
 router.get('/players', function(req, res){
     Player.getPlayers(function(err, players){
-        resultHandler.handleResult(err,res,players,"Players not found!");
+        resultHandler.handleResult(err, res, players, "Players not found!");
     })
 });
 
@@ -47,7 +47,7 @@ router.put('/update', function(req, res){
         player.userId = req.body.userId;
 
 		Player.updatePlayer(player, function (err, uPlayer) {
-            resultHandler.handleResult(err,res,uPlayer,"Player update not ok!");
+            resultHandler.handleResult(err, res, uPlayer, "Player update not ok!");
 		});
     }
 });

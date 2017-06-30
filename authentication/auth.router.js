@@ -3,11 +3,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
-var roleConstants = require('../Roles/roles.constants');
+var roleConstants = require('../roles/roles.constants');
 
 // Require User and Role Schema
-var User = require('../Users/users.controller');
-var Role = require('../Roles/roles.controller');
+var User = require('../users/users.controller');
+var Role = require('../roles/roles.controller');
 
 // Define the Local Auth Strategy
 passport.use(new LocalStrategy(

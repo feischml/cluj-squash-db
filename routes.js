@@ -1,26 +1,24 @@
-var clubRouter = require('./Clubs/clubs.routes');
-var userRouter = require('./Users/users.routes');
-var roleRouter = require('./Roles/roles.routes');
-var playerRouter = require('./Players/players.routes');
-var coachRouter = require('./Coaches/coaches.routes');
-var associationRouter = require('./Associations/associations.routes');
-var authRouter = require('./Auth/auth.router');
+// Import routes
+var clubRouter = require('./clubs/clubs.routes');
+var userRouter = require('./users/users.routes');
+var roleRouter = require('./roles/roles.routes');
+var playerRouter = require('./players/players.routes');
+var coachRouter = require('./coaches/coaches.routes');
+var associationRouter = require('./associations/associations.routes');
+var authRouter = require('./authentication/auth.router');
+var eventRouter = require('./events/events.routes');
 
 function initRoutes(app){
-    // Add Club router to Express App
+    // Add the routes to the Express App
     app.use('/clubs', clubRouter);
-    // Add User router to Express App
     app.use('/users', userRouter);
-    // Add Role router to Express App
     app.use('/roles', roleRouter);
-    // Add Players router to Express App
     app.use('/players', playerRouter);
-    // Add Coaches routes to Express App
     app.use('/coaches', coachRouter);
-    // Add Association routes to Express App
     app.use('/associations', associationRouter);
-    // Add Authentication routes to Express App
     app.use('/auth', authRouter);
+    app.use('/events', eventRouter);
 }
 
+// Export function addin routes to App
 module.exports.initRoutes = initRoutes;

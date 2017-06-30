@@ -20,7 +20,7 @@ router.post('/create', function(req, res){
 		association.description  = req.body.description;
 
         Association.createAssociation(association, function(err, cAssociation){
-            resultHandler.handleResult(err,res,cAssociation,"Association not created");
+            resultHandler.handleResult(err, res, cAssociation, "Association not created");
         });
     }
 });
@@ -28,7 +28,7 @@ router.post('/create', function(req, res){
 // 2. Get Associations - http://localhost:3000/associations/associations
 router.get('/associations', function(req, res){
     Association.getAssociations(function(err, associations){
-        resultHandler.handleResult(err,res,associations,"Associations not found");
+        resultHandler.handleResult(err, res, associations, "Associations not found");
     })
 });
 
@@ -63,7 +63,7 @@ router.put('/update', function(req, res){
         association.name = req.body.name;
 
 		Association.updateAssociation(association, function (err, uAssociation) {
-            resultHandler.handleResult(err,res,uAssociation,"Association updated not ok");
+            resultHandler.handleResult(err, res, uAssociation, "Association updated not ok");
 		});
     }
 });
@@ -78,15 +78,15 @@ router.delete('/delete/:id', function(req, res){
         res.status(495).send(errors);
     else{
          let associationId = req.params.id;
-         Association.deleteAssociationById(associationId, function(err,dAssociation){
-            resultHandler.handleResult(err,res,dAssociation,"Association could not be deleted!");
+         Association.deleteAssociationById(associationId, function(err, dAssociation){
+            resultHandler.handleResult(err, res, dAssociation, "Association could not be deleted!");
         });
     }
 });
 
 function executeAssociationDbQuery(query, res){
     Association.getAssociation(query, function(err, association){
-        resultHandler.handleResult(err,res,association,"Association not found!");
+        resultHandler.handleResult(err, res, association, "Association not found!");
     });
 }
 

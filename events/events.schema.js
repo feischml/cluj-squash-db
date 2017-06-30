@@ -3,8 +3,8 @@ let mongoose = require('mongoose');
 // Needed for mongoose.Schema.Types.Point
 let geoJson = require('mongoose-geojson-schema'); 
 
-let clubSchema = mongoose.Schema({
-    clubname:{
+let eventSchema = mongoose.Schema({
+    name:{
         type: String,
         required: true
     },
@@ -16,9 +16,21 @@ let clubSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    phone:{
-        type: String,
+    date:{
+        type: Date,
         required: true
+    },
+    registeruntildate:{
+        type: Date,
+        required: false
+    },
+    locationdescrition:{
+        type: String,
+        required: false
+    },
+    locationwebpage:{
+        type: String,
+        required: false
     },
     maplocation:{
         type: mongoose.Schema.Types.Point,
@@ -26,4 +38,4 @@ let clubSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('club', clubSchema, 'clubs');
+module.exports = mongoose.model('event', eventSchema, 'events');

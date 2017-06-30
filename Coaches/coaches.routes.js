@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
 var Coach = require('./coaches.controller');
-var User = require('../Users/users.controller');
+var User = require('../users/users.controller');
 
 // 1. Create a Coach (when sign-up is done and Coach role is selected) -> see User / register
 
 // 2. Get Coaches - http://localhost:3000/coaches/coaches
 router.get('/coaches', function(req, res){
     Coach.getCoaches(function(err, coaches){
-        resultHandler.handleResult(err,res,coaches,"Coaches not found!");
+        resultHandler.handleResult(err, res, coaches,"Coaches not found!");
     })
 });
 
@@ -44,7 +44,7 @@ router.put('/update', function(req, res){
         coach.userId = req.body.userId;
 
 		Coach.updateCoach(coach, function (err, uCoach) {
-            resultHandler.handleResult(err,res,uCoach,"Coach update not ok!");
+            resultHandler.handleResult(err, res, uCoach, "Coach update not ok!");
 		});
     }
 });
