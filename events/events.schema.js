@@ -35,7 +35,12 @@ let eventSchema = mongoose.Schema({
     maplocation:{
         type: mongoose.Schema.Types.Point,
         required: false
-    }
+    },
+    userIds:
+        [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }]
 });
 
 module.exports = mongoose.model('event', eventSchema, 'events');

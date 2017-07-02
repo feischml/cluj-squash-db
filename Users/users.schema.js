@@ -27,8 +27,10 @@ let userSchema = mongoose.Schema({
         required: false
     },
     roleIds:
-        [{type: mongoose.Schema.Types.ObjectId,
-         ref: 'role'}]
+        [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'role'
+        }]
     // ToDo photoId -> "join with Photos"
 });
 
