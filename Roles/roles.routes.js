@@ -9,16 +9,19 @@ router.post('/create', function(req, res){
     req.checkBody('roletype', 'Type is required!').notEmpty();
     req.checkBody('name', 'Name is required!').notEmpty();
     req.checkBody('description', 'Description is required!').notEmpty();
+    req.checkBody('basic', 'BASIC role setting is required!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors)
         res.status(495).send(errors);
     else {
+
         var role = new Role();
         role.roletype       = req.body.roletype;
 		role.name           = req.body.name;
 		role.description    = req.body.description;
         role.admin          = req.body.admin;
+        role.basic          = req.body.basic;
 
         Role.createRole(role, function(err, cRole){
             resultHandler.handleResult(err, res, cRole, "Role not created!");
@@ -41,6 +44,7 @@ router.put('/update', function(req, res){
 		role.description    = req.body.description;
 		role.roletype       = req.body.roletype;
         role.admin          = req.body.admin;
+        role.basic          = req.body.basic;
 
 		Role.updateRole(role, function (err, uRole) {
             resultHandler.handleResult(err, res, uRole, "Role update not ok!");
@@ -67,6 +71,32 @@ router.get('/roleid/:id', function(req, res){
     else {   
         var query = { _id: req.params.id };
         executeRoleDbQuery(query, res);
+    }
+});
+
+// 4. Delete Roles
+router.delete('/delete/:id', function(req, res){
+    // Validation
+    req.checkParams('id', 'Role id is required!').notEmpty().isHexadecimal();
+
+    var errors = req.validationErrors();
+    if(errors)
+        res.status(495).send(errors);
+    else{
+        let roleId = req.params.id;
+        // Get the Role and check if it is BASIC
+        var query = { _id: req.params.id };
+        Role.getRole(query, function(err, role){
+            if (err)
+                res.status(495).send(err);
+            else if (role)
+                if (!role['basic'])
+                    Role.deleteRoleById(roleId, function(err, dRole){
+                        resultHandler.handleResult(err, res, dRole, "Role could not be deleted!");
+                    });
+            else
+                res.status(400).send("Role not found!");    
+        });
     }
 });
 

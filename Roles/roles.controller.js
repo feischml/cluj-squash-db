@@ -23,3 +23,8 @@ module.exports.getRole = function (options, callback) {
 module.exports.getRoles = function (roles, callback) {
 	RolesSchema.find(roles, callback);
 }
+
+// Delete Role
+module.exports.deleteRoleById = function (roleId, callback) {
+    RolesSchema.findByIdAndRemove(roleId, callback);
+}
