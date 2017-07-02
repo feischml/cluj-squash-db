@@ -21,7 +21,7 @@ module.exports.getPlayer = function (options, callback) {
 
 // Get all Players
 module.exports.getPlayers = function (players, callback) {
-	PlayersSchema.find(players, callback);
+	PlayersSchema.find(players, callback).populate('userId');
 }
 
 // Delete Player By ID

@@ -21,7 +21,7 @@ module.exports.getCoach = function (options, callback) {
 
 // Get all Coaches
 module.exports.getCoaches = function (coaches, callback) {
-	CoachesSchema.find(coaches, callback);
+	CoachesSchema.find(coaches, callback).populate('userId');
 }
 
 // Delete Coach

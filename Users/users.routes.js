@@ -173,8 +173,6 @@ function createPlayerCoach(cUser, res) {
 function deletePlayerCoach(dUser, res) {
     let roles = dUser.roleIds;
     var deleteStatus = true; // we assume that everything will go well
-
-    //ToDo: get all the roles at once!
     roles.forEach(function (element) {
         if (element) {
             let query = { _id: element };
