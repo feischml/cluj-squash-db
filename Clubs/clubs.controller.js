@@ -23,3 +23,8 @@ module.exports.getClub = function (options, callback) {
 module.exports.getClubs = function (clubs, callback) {
 	ClubsSchema.find(clubs, callback);
 }
+
+// Delete Club
+module.exports.deleteClubById = function (clubId, callback) {
+    ClubsSchema.findByIdAndRemove(clubId, callback);
+}

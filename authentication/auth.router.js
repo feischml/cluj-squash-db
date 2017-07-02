@@ -84,16 +84,13 @@ router.get('/logout', function (req, res){
 
 // Passport needs to be able to serialize and deserialize users to support persistent login sessions
 passport.serializeUser(function (user, done) {
-    console.log("serializing:" + user);
 	if (user) 
         done(null, user._id);
 });
 
 // Desieralize user will call with the unique id provided by serialize user
 passport.deserializeUser(function (id, done) {
-    console.log("id: " + id);
 	User.getUserById(id, function (err, user) {
-        console.log("deserialize: " + user);
 		done(err, user);
 	});
 });

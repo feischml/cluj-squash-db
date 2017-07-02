@@ -88,6 +88,22 @@ router.get('/clubid/:id', function(req, res){
     }
 });
 
+// 5. Delete Club
+router.delete('/delete/:id', function(req, res){
+    // Validation
+    req.checkParams('id', 'Club id is required!').notEmpty().isHexadecimal();
+
+    var errors = req.validationErrors();
+    if(errors)
+        res.status(495).send(errors);
+    else{
+         let clubId = req.params.id;
+         Club.deleteClubById(clubId, function(err, dClub){
+            resultHandler.handleResult(err, res, dClub, "Club could not be deleted!");
+        });
+    }
+});
+
 function executeClubDbQuery(query, res){
     Club.getClub(query, function(err, club){
         resultHandler.handleResult(err, res, club, "Club not found!");
