@@ -81,8 +81,6 @@ router.put('/update', function(req, res){
 // 4.b. Update User registration
 router.put('/register',function(req, res){
     // Validation
-    console.log(req.body);
-
     req.checkBody('userId', 'User must be delivered!').notEmpty();
     req.checkBody('eventId', 'Event must be delivered').notEmpty();
 
@@ -93,15 +91,23 @@ router.put('/register',function(req, res){
         var eventId = req.body.eventId;
         var userId = req.body.userId;
 
-        // 1. Get the userIds of the event
+        // a. Get the userIds of the event
         Events.getRegisteredUsers(eventId, function(err, userIds){
-            if(err)
-                console.log(err);
-            else{
-                console.log(userIds);
+            if (err)
+                res.status(495).send(err);
+            else if (userIds){
+                // b. Check if the acual user is already registered - if not, insert it
+                let newUserIds = userIds['userIds'];
+                if (newUserIds.indexOf(userId) == -1){
+                    newUserIds.push(userId);
+                    Events.updateUserIds(eventId, newUserIds, function(err, uEvent){
+                        resultHandler.handleResult(err, res, uEvent, "User could not be registered!");
+                    })
+                }
+            } else {
+                response.status(400).send(message);
             }
         });
-
     }
 });
 

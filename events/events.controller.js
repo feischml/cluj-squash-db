@@ -33,3 +33,8 @@ module.exports.deleteEventById = function (eventId, callback) {
 module.exports.getRegisteredUsers = function(eventId, callback){
 	var query = EventsSchema.findById(eventId, 'userIds', callback);
 }
+
+// Update the UserIds
+module.exports.updateUserIds = function(eventId, userIds, callback){
+	EventsSchema.update({ _id: eventId }, { userIds: userIds }, callback);
+}
