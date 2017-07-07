@@ -78,6 +78,33 @@ router.put('/update', function(req, res){
     }
 });
 
+// 4.b. Update User registration
+router.put('/register',function(req, res){
+    // Validation
+    console.log(req.body);
+
+    req.checkBody('userId', 'User must be delivered!').notEmpty();
+    req.checkBody('eventId', 'Event must be delivered').notEmpty();
+
+    var errors = req.validationErrors();
+    if(errors)
+        res.status(495).send(errors);
+    else{
+        var eventId = req.body.eventId;
+        var userId = req.body.userId;
+
+        // 1. Get the userIds of the event
+        Events.getRegisteredUsers(eventId, function(err, userIds){
+            if(err)
+                console.log(err);
+            else{
+                console.log(userIds);
+            }
+        });
+
+    }
+});
+
 // 5. Delete Event
 router.delete('/delete/:id', function(req, res){
     // Validation

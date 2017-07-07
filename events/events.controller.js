@@ -29,8 +29,7 @@ module.exports.deleteEventById = function (eventId, callback) {
     EventsSchema.findByIdAndRemove(eventId, callback);
 }
 
-// Register User for Event
-module.exports.registerUserToEvent = function(eventId, event, callback){
-	EventsSchema.findByIdAndUpdate(eventId, event, callback);
-	// ToDo update only one field
+// Get only the registeres Users for an event
+module.exports.getRegisteredUsers = function(eventId, callback){
+	var query = EventsSchema.findById(eventId, 'userIds', callback);
 }
