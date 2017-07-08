@@ -111,6 +111,40 @@ router.put('/register',function(req, res){
     }
 });
 
+// 4.c. Update User un-registration
+router.put('/unregister',function(req, res){
+    // Validation
+    req.checkBody('userId', 'User must be delivered!').notEmpty();
+    req.checkBody('eventId', 'Event must be delivered').notEmpty();
+
+    var errors = req.validationErrors();
+    if(errors)
+        res.status(495).send(errors);
+    else{
+        var eventId = req.body.eventId;
+        var userId = req.body.userId;
+
+        // a. Get the userIds of the event
+        Events.getRegisteredUsers(eventId, function(err, userIds){
+            if (err)
+                res.status(495).send(err);
+            else if (userIds){
+                // b. Check if the acual user is already registered - if yes, unregister him
+                let newUserIds = userIds['userIds'];
+                let indexUserId = newUserIds.indexOf(userId);
+                if (indexUserId >= 0){
+                    newUserIds.splice(indexUserId, 1);
+                    Events.updateUserIds(eventId, newUserIds, function(err, uEvent){
+                        resultHandler.handleResult(err, res, uEvent, "User could not be un-registered!");
+                    })
+                }
+            } else {
+                response.status(400).send(message);
+            }
+        });
+    }
+});
+
 // 5. Delete Event
 router.delete('/delete/:id', function(req, res){
     // Validation
