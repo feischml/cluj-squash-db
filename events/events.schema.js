@@ -40,7 +40,15 @@ let eventSchema = mongoose.Schema({
         [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
-        }]
+        }],
+    isNews: {
+        type: Boolean,
+        required: false
+    },
+    participationAllowed: {
+        type: Boolean,
+        required: false
+    }
 });
 
 module.exports = mongoose.model('event', eventSchema, 'events');

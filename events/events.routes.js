@@ -23,6 +23,8 @@ router.post('/create', function(req, res){
         event.locationdescription = req.body.locationdescription;
         event.locationwebpage = req.body.locationwebpage;
         event.eventdate = req.body.eventdate;
+        event.isNews = req.body.isNews;
+        event.participationAllowed = req.body.participationAllowed;
         // todo: event.maplocation = req.body.maplocation
 
         Events.createEvent(event, function(err, cEvent){
@@ -70,6 +72,8 @@ router.put('/update', function(req, res){
         event.locationdescription = req.body.locationdescription;
         event.locationwebpage = req.body.locationwebpage;
         event.eventdate = req.body.eventdate;
+        event.isNews = req.body.isNews;
+        event.participationAllowed = req.body.participationAllowed;
         // todo: event.maplocation = req.body.maplocation
 
 		Events.updateEvent(event, function (err, uEvent) {
