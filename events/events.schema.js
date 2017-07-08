@@ -48,6 +48,10 @@ let eventSchema = mongoose.Schema({
     participationAllowed: {
         type: Boolean,
         required: false
+    },
+    rankingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ranking'
     }
 });
 
