@@ -9,7 +9,7 @@ router.post('/create', function(req, res){
     ranking.details = req.body.details;
 
     Rankings.createRanking(ranking, function(err, cRanking){
-        resultHandler.handleResult(err, res, cEvent, "Ranking not created!");
+        resultHandler.handleResult(err, res, cRanking, "Ranking not created!");
     });
 });
 
@@ -23,7 +23,7 @@ router.get('/rankingid/:id', function(req, res){
         res.status(495).send(errors);
     else {   
         var query = { _id: req.params.id };
-        executeEventDbQuery(query, res);
+        executeRankingDbQuery(query, res);
     }
 });
 

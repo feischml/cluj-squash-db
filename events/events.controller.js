@@ -38,3 +38,8 @@ module.exports.getRegisteredUsers = function(eventId, callback){
 module.exports.updateUserIds = function(eventId, userIds, callback){
 	EventsSchema.update({ _id: eventId }, { userIds: userIds }, callback);
 }
+
+// Update the RankingId
+module.exports.updateRankingId = function(eventId, rankingId, callback){
+	EventsSchema.update({ _id: eventId }, { rankingId: rankingId }, callback);
+}

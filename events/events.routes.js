@@ -153,6 +153,25 @@ router.put('/unregister',function(req, res){
     }
 });
 
+// 4.c. Update User un-registration
+router.put('/updateRankingId',function(req, res){
+    // Validation
+    req.checkBody('rankingId', 'Ranking must be delivered!').notEmpty();
+    req.checkBody('eventId', 'Event must be delivered').notEmpty();
+
+    var errors = req.validationErrors();
+    if(errors)
+        res.status(495).send(errors);
+    else{
+        var eventId = req.body.eventId;
+        var rankingId = req.body.rankingId;
+
+        Events.updateRankingId(eventId, rankingId, function(err, uEvent){
+                        resultHandler.handleResult(err, res, uEvent, "Ranking could not be updated!");
+                    });
+    }
+});
+
 // 5. Delete Event
 router.delete('/delete/:id', function(req, res){
     // Validation
