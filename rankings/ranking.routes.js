@@ -8,6 +8,8 @@ router.post('/create', function(req, res){
     var ranking = new Rankings();
     ranking.details = req.body.details;
 
+    console.log(ranking);
+
     Rankings.createRanking(ranking, function(err, cRanking){
         resultHandler.handleResult(err, res, cRanking, "Ranking not created!");
     });
