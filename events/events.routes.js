@@ -26,7 +26,7 @@ router.post('/create', function(req, res){
         event.userIds = req.body.userIds;
         event.isNews = req.body.isNews;
         event.participationAllowed = req.body.participationAllowed;
-        event.rankingId = req.body.rankingId;
+        //event.rankingId = req.body.rankingId;
         // todo: event.maplocation = req.body.maplocation
 
         Events.createEvent(event, function(err, cEvent){

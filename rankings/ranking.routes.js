@@ -1,14 +1,21 @@
 var express = require('express');
 var router = express.Router();
 var resultHandler = require('../response.handler');
+let RankingsDetail = require('./rankingdetail.schema').model;
 var Rankings = require('./ranking.controller');
 
 // 1. Create a Ranking
 router.post('/create', function(req, res){
     var ranking = new Rankings();
-    ranking.details = req.body.details;
-
-    console.log(ranking);
+    // Create the details
+    var details = req.body.details;
+    details.forEach(function(element) {
+        let rankingDetail = new RankingsDetail();
+        rankingDetail.position = element.position,
+        rankingDetail.points = element.points,
+        rankingDetail.fullname = element.fullname
+        ranking.details.push(rankingDetail);
+    }, this);
 
     Rankings.createRanking(ranking, function(err, cRanking){
         resultHandler.handleResult(err, res, cRanking, "Ranking not created!");
