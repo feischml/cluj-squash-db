@@ -6,8 +6,8 @@ var Association = require('./associations.controller');
 // 1. Create an Association 
 router.post('/create', function(req, res){
     // Validation
-    req.checkBody('name', 'Type is required!').notEmpty();
-    req.checkBody('webpage', 'Name is required!').notEmpty();
+    req.checkBody('name', 'Name is required!').notEmpty();
+    req.checkBody('webpage', 'Webpage is required!').notEmpty();
     req.checkBody('description', 'Description is required!').notEmpty();
 
     var errors = req.validationErrors();
@@ -15,9 +15,9 @@ router.post('/create', function(req, res){
         res.status(495).send(errors);
     else {
         var association = new Association();
-        association.webpage      = req.body.webpage;
-		association.name         = req.body.name;
-		association.description  = req.body.description;
+        association.webpage = req.body.webpage;
+		association.name = req.body.name;
+		association.description = req.body.description;
 
         Association.createAssociation(association, function(err, cAssociation){
             resultHandler.handleResult(err, res, cAssociation, "Association not created");
@@ -45,7 +45,6 @@ router.get('/associationid/:id', function(req, res){
         executeAssociationDbQuery(query, res);
     }
 });
-
 
 // 4. Update Association
 router.put('/update', function(req, res){

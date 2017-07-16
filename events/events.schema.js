@@ -53,6 +53,9 @@ let eventSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ranking'
     }
+    //,photoId: {
+    //  type: mongoose.Schema.Types.ObjectId,
+    //} ref: 'photo'
 });
 
 module.exports = mongoose.model('event', eventSchema, 'events');
