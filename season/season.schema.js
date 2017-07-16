@@ -24,7 +24,8 @@ let seasonSchema = mongoose.Schema({
     },
     actualRankingId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ranking'
+        ref: 'ranking',
+        required: false
     },
     //photoId: { +++++ToDo
     //    type: mongoose.Schema.Types.ObjectId,
