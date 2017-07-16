@@ -9,6 +9,7 @@ var authRouter = require('./authentication/auth.router');
 var eventRouter = require('./events/events.routes');
 var rankingRouter = require('./rankings/ranking.routes');
 var seasonTypeRouter = require('./seasontype/seasontype.routes');
+var seasonRouter = require('./season/season.routes');
 
 function initRoutes(app){
     // Add the routes to the Express App
@@ -22,6 +23,7 @@ function initRoutes(app){
     app.use('/events', eventRouter);
     app.use('/rankings', rankingRouter);
     app.use('/seasontype', seasonTypeRouter);
+    app.use('/season', seasonRouter);
 }
 
 // Export function addin routes to App
