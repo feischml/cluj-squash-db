@@ -1,0 +1,40 @@
+1. Season Types 
+    a. message handling when duplicate season type entered; for example when season
+       is edited and modified, no message appears
+    b. when a season type is edited of deleted - message with the fact that this can lead to inconsistent data
+       if there are already existent seasons with the given type -> message should appear only when 
+       there really is a season created -> check to be implemented
+2. Season
+    a. link event with season -> event should have a field (not mandatory) linked to season_id and this can be also edited
+       and to be shown if an event is part of a season (in the Events menu option)
+    b. Manage Ranking of a season -> the season name should appear to be clear for which you are editing the Ranking
+
+3. Events
+    a. Manage Ranking of an event -> the event name should appear to be clear for which you are editing the Ranking
+    b. Manage events -> if registration is allowed and you modify that it is not allowed afterwards -> there has to
+       be a check to see if there are already registered players and if ranking was created. If yes, then message should
+       appear that changing settings will conclude in inconsistent data
+       -> also when deleting the event and there are registered players, existing rankings
+    c. Register until date -> clearly specify the hours until when the registration is possible
+
+4. Manage Users -> role management -> to show which roles are set 
+
+5. Edit My Account -> role management -> to show which roles are set
+
+6. Non Admin
+    a. add Seasons menu item -> same as events -> Carousel
+    b. under Seasons and Events add the Rankings item
+        -> list of seasons and events and when clicking on it, on the rigth the ranking should appear
+        -> of course only for the seasons/events which have rankings allowed
+
+7. log-in / log-out with OAUTH
+
+8. show name of the user logged in -> under it: Events Registrations and move the Edit My Account from the People
+   option here
+   -> in the list of registered events -> also an unregistration should be possible if the registration date is not 
+      in the past
+   -> if it is in the past, this option should not appear -> also on the events menu item
+
+9. Location implementation -> google maps and coordinates where it is needed
+
+10. Internationalization
