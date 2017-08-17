@@ -15,7 +15,6 @@ router.post('/create', function(req, res){
     if (errors)
         res.status(495).send(errors);
     else {
-
         var role = new Role();
         role.roletype       = req.body.roletype;
 		role.name           = req.body.name;
